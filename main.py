@@ -101,3 +101,6 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
 df.to_sql(GENERAL_TABLE,conn1,if_exists=IF_EXISTS,index=False)
 
 
+
+
+
