@@ -1,2 +1,8 @@
-faker
-pandas
+faker~=7.0.1
+pandas~=1.2.3
+
+requests~=2.25.1
+PyYAML~=5.4.1
+tqdm~=4.60.0
+setuptools~=54.2.0
+numpy~=1.20.2

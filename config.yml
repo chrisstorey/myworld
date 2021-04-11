@@ -1,0 +1,9 @@
+database:
+  # This is the name of the database where the data is stored
+  db: /home/chris/Personal_distro/myworld/myworld.sqlite
+  # Should be either replace or append depending on the action needed.
+  if_exists: replace
+  # Database table
+  general_table: myworld
+
+total_records: 100
