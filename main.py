@@ -4,6 +4,7 @@ import requests
 import yaml
 from faker import Faker
 from tqdm import tqdm
+import random
 
 from sql_helpers import create_connection
 
@@ -18,6 +19,13 @@ DATABASE = cfg["database"]["db"]
 GENERAL_TABLE = cfg["database"]["general_table"]
 IF_EXISTS = cfg["database"]["if_exists"]
 TOTAL_RECORDS = cfg["total_records"]
+
+
+def sex():
+    sex=random.choices('Male','Female', weights=[9767,10000])
+    return sex
+
+
 
 # Create DB connection
 conn1 = create_connection(DATABASE)
@@ -57,7 +65,9 @@ df = pd.DataFrame(index=range(0, TOTAL_RECORDS), columns=[
     "cd_nuts",
     "cd_lsoa",
     "cd_msoa",
-    "cd_lau2"])
+    "cd_lau2",
+    'IMD_2019'])
+
 
 for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     r = requests.get('http://localhost:8000/random/postcodes')
@@ -97,6 +107,8 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     df._set_value(i, 'cd_lsoa', data['result']['codes']['lsoa'])
     df._set_value(i, 'cd_msoa', data['result']['codes']['msoa'])
     df._set_value(i, 'cd_lau2', data['result']['codes']['lau2'])
+
+    print(sex())
 
 df.to_sql(GENERAL_TABLE,conn1,if_exists=IF_EXISTS,index=False)
 
