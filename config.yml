@@ -6,4 +6,4 @@ database:
   # Database table
   general_table: myworld
 
-total_records: 10000
+total_records: 1000
