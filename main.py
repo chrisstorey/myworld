@@ -36,6 +36,22 @@ def dep_children():
     children = random.choices([1, 2, 3], weights=[38, 46, 15])
     return children
 
+def student_male():
+    student = random.choices([1, 2, 3, 4], weights=[30, 35, 20, 15])
+    return student
+
+def student_female():
+    student = random.choices([1, 2, 3, 4], weights=[30, 35, 20, 15])
+    return student
+
+def other_adult_distrib():
+    adults = random.choices(["MMM", "MMF", "MFF", "FFF", "FFM", "FMM"])
+    return adults
+
+def two_or_more_dep_children():
+    children = random.choices([2, 3], weights=[75, 25])
+    return children
+
 
 # Create DB connection
 conn1 = create_connection(DATABASE)
@@ -94,7 +110,7 @@ def create_house():
 
 
 for i in tqdm(np.arange(0, TOTAL_RECORDS)):
-    r = requests.get('http://localhost:8000/random/postcodes')
+    r = requests.get('https://api.postcodes.io/random/postcodes')
     data = r.json()
     if data['result']['codes']['ced'] == 'N99999999' \
             or data['result']['codes']['ced'] == 'S99999999' \
@@ -354,16 +370,32 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
         non_dep = dep_children()[0]
 
     if res == "Other household types: With one dependent child":
+        adults = other_adult_distrib()[0]
+        adults_over65 = 0
+        adult_m = adults.count('M')
+        adult_f = adults.count('F')
+        adults_total = adult_m + adult_f + 1
+        married = False
+        children_total = 0
+        non_dep = 1
         print("edge case")
 
-    if res == "Other household types: With two or more dependent childre":
+    if res == "Other household types: With two or more dependent children":
+        adults = other_adult_distrib()[0]
+        adults_over65 = 0
+        adult_m = adults.count('M')
+        adult_f = adults.count('F')
+        married = False
+        children_total = 0
+        non_dep = two_or_more_dep_children()[0]
+        adults_total = adult_m + adult_f + non_dep
         print("edge case")
 
     if res == "Other household types: All full-time students":
-        adults_total = 4
         adults_over65 = 0
-        adult_m = 2
-        adult_f = 2
+        adult_m = student_male()[0]
+        adult_f = student_female()[0]
+        adults_total = adult_m + adult_f
         married = False
         children_total = 0
         non_dep = 0
@@ -380,7 +412,15 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
         print("edge case")
 
     if res == "Other household types: Other":
+        adults_total = 4
+        adults_over65 = 2
+        adult_m = 3
+        adult_f = 3
+        married = False
+        children_total = 0
+        non_dep = 0
         print("edge case")
+
 
     df._set_value(i, 'household_type', res)
     df._set_value(i, 'adults_total', adults_total)
