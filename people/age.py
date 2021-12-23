@@ -1,5 +1,10 @@
 import random
 
+from faker import Faker
+
+fake = Faker()
+Faker.seed(0)
+
 age_under18_names = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                      '10', '11', '12', '13', '14', '15', '16', '17']
 
@@ -42,33 +47,86 @@ age_working_age_weights = [1388, 1316, 1377, 1414, 1489, 1516, 1527, 1611, 1617,
 
 age_over65_names = ['65', '66', '67', '68', '69', '70', '71', '72', '73', '74',
                     '75', '76', '77', '78', '79', '80', '81', '82', '83', '84',
-                    '85', '86', '87', '88', '89', '90+']
+                    '85', '86', '87', '88', '89', '90']
 
 age_over65_weights = [1344, 1322, 1279, 1284, 1304, 1333, 1400, 1508, 1151, 1106,
                       1088, 998, 880, 778, 792, 769, 729, 673, 618, 565,
                       499, 451, 411, 365, 314, 1188]
 
 
-def age_under18():
+def age_under18() -> int:
     age = random.choices(age_under18_names, weights=age_under18_weights)
-    return age
+    return_age = int(age[0])
+    return return_age
 
 
-def age_non_dep():
+def age_non_dep() -> int:
     age = random.choices(age_non_dep_names, weights=age_non_dep_weights)
-    return age
+    return_age = int(age[0])
+    return return_age
 
 
-def age_over18():
+def age_over18() -> int:
     age = random.choices(age_over18_names, weights=age_over18_weights)
-    return age
+    return_age = int(age[0])
+    return return_age
 
 
-def age_working_age():
+def age_working_age() -> int:
     age = random.choices(age_working_age_names, weights=age_working_age_weights)
-    return age
+    return_age = int(age[0])
+    return return_age
 
 
-def age_over65():
+def age_over65() -> int:
     age = random.choices(age_over65_names, weights=age_over65_weights)
-    return age
+    return_age = int(age[0])
+    return return_age
+
+
+def year_of_birth(age: int) -> int:
+    import datetime
+    now = datetime.datetime.now()
+    year = now.year - age
+    return year
+
+
+def fake_dob(year_of_b: int):
+    birth = fake.date_of_birth()
+    birth = birth.replace(year=year_of_b)
+    return birth
+
+
+def dob_over65():
+    age = age_over65()
+    year = year_of_birth(age)
+    dob = fake_dob(year)
+    return dob
+
+
+def dob_working_age():
+    age = age_working_age()
+    year = year_of_birth(age)
+    dob = fake_dob(year)
+    return dob
+
+
+def dob_under18():
+    age = age_under18()
+    year = year_of_birth(age)
+    dob = fake_dob(year)
+    return dob
+
+
+def dob_over18():
+    age = age_over18()
+    year = year_of_birth(age)
+    dob = fake_dob(year)
+    return dob
+
+
+def dob_non_dep():
+    age = age_non_dep()
+    year = year_of_birth(age)
+    dob = fake_dob(year)
+    return dob

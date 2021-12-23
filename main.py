@@ -1,11 +1,10 @@
-import numpy as np
+import random
+
 import pandas as pd
 import requests
 import yaml
 from faker import Faker
 from tqdm import tqdm
-import random
-import household
 
 from sql_helpers import create_connection
 
@@ -18,13 +17,9 @@ with open("config.yml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.SafeLoader)
 DATABASE = cfg["database"]["db"]
 GENERAL_TABLE = cfg["database"]["general_table"]
+PEOPLE_TABLE = cfg["database"]["people_table"]
 IF_EXISTS = cfg["database"]["if_exists"]
 TOTAL_RECORDS = cfg["total_records"]
-
-
-def sex():
-    sex = random.choices(['Male', 'Female'], weights=[9767, 10000])
-    return sex
 
 
 def two_or_three_and_more_children():
@@ -88,37 +83,34 @@ df = pd.DataFrame(index=range(0, TOTAL_RECORDS), columns=[
 
 
 def create_house():
-
-
     return res, adults_total, adults_over65, adult_m, adult_f, married, children_total, non_dep
 
 
-for i in tqdm(np.arange(0, TOTAL_RECORDS)):
-    r = requests.get('http://localhost:8000/random/postcodes')
+df_postcodelist = pd.read_csv('/home/chris/Personal_distro/myworld/appropriate_postcodes_sample.csv')
+for i in tqdm(range(0, len(df_postcodelist))):
+    to_lookup = df_postcodelist.iat[i, 0].replace(' ', '')
+    print(to_lookup)
+    r = requests.get('https://postcodes.io/postcodes/' + to_lookup)
     data = r.json()
-    if data['result']['codes']['ced'] == 'N99999999' \
-            or data['result']['codes']['ced'] == 'S99999999' \
-            or data['result']['codes']['ced'] == 'W99999999' \
-            or data['result']['codes']['ced'] == 'M99999999':
-        continue
-    df._set_value(i, 'My_World_premise_UUID', fake.uuid4())
-    df._set_value(i, 'postcode', data['result']['postcode'])
-    df._set_value(i, 'quality', data['result']['quality'])
-    df._set_value(i, 'eastings', data['result']['eastings'])
-    df._set_value(i, 'northings', data['result']['northings'])
-    df._set_value(i, 'country', data['result']['country'])
-    df._set_value(i, 'nhs_ha', data['result']['nhs_ha'])
-    df._set_value(i, 'longitude', data['result']['longitude'])
-    df._set_value(i, 'latitude', data['result']['latitude'])
-    df._set_value(i, 'primary_care_trust', data['result']['primary_care_trust'])
-    df._set_value(i, 'region', data['result']['region'])
-    df._set_value(i, 'lsoa', data['result']['lsoa'])
-    df._set_value(i, 'msoa', data['result']['msoa'])
-    df._set_value(i, 'incode', data['result']['incode'])
-    df._set_value(i, 'outcode', data['result']['outcode'])
-    df._set_value(i, 'parliamentary_constituency', data['result']['parliamentary_constituency'])
-    df._set_value(i, 'admin_district', data['result']['admin_district'])
-    df._set_value(i, 'parish', data['result']['parish'])
+    continue
+df._set_value(i, 'My_World_premise_UUID', fake.uuid4())
+df._set_value(i, 'postcode', data['result']['postcode'])
+df._set_value(i, 'quality', data['result']['quality'])
+df._set_value(i, 'eastings', data['result']['eastings'])
+df._set_value(i, 'northings', data['result']['northings'])
+df._set_value(i, 'country', data['result']['country'])
+df._set_value(i, 'nhs_ha', data['result']['nhs_ha'])
+df._set_value(i, 'longitude', data['result']['longitude'])
+df._set_value(i, 'latitude', data['result']['latitude'])
+df._set_value(i, 'primary_care_trust', data['result']['primary_care_trust'])
+df._set_value(i, 'region', data['result']['region'])
+df._set_value(i, 'lsoa', data['result']['lsoa'])
+df._set_value(i, 'msoa', data['result']['msoa'])
+df._set_value(i, 'incode', data['result']['incode'])
+df._set_value(i, 'outcode', data['result']['outcode'])
+df._set_value(i, 'parliamentary_constituency', data['result']['parliamentary_constituency'])
+df._set_value(i, 'admin_district', data['result']['admin_district'])
+df._set_value(i, 'parish', data['result']['parish'])
     df._set_value(i, 'admin_county', data['result']['admin_county'])
     df._set_value(i, 'admin_ward', data['result']['admin_ward'])
     df._set_value(i, 'ced', data['result']['ced'])
@@ -142,7 +134,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One person household: Aged 65 and over":
         adults_total = 0
         adults_over65 = 1
-        if sex()[0] == 'Male':
+        if gender()[0] == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -155,7 +147,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One person household: Other":
         adults_total = 1
         adults_over65 = 0
-        if sex()[0] == 'Male':
+        if gender()[0] == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -216,7 +208,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One family only: Same-sex civil partnership couple: No children":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff = sex()
+        mm_or_ff = gender()
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -230,7 +222,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One family only: Same-sex civil partnership couple: One dependent child":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff = sex()
+        mm_or_ff = gender()
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -244,7 +236,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One family only: Same-sex civil partnership couple: Two or more dependent children":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff = sex()
+        mm_or_ff = gender()
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -261,7 +253,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One family only: Same-sex civil partnership couple: All children non-dependent":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff = sex()
+        mm_or_ff = gender()
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -314,7 +306,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One family only: Lone parent: One dependent child":
         adults_total = 1
         adults_over65 = 0
-        if sex()[0] == 'Male':
+        if gender()[0] == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -327,7 +319,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One family only: Lone parent: Two or more dependent children":
         adults_total = 2
         adults_over65 = 0
-        if sex()[0] == 'Male':
+        if gender()[0] == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -343,7 +335,7 @@ for i in tqdm(np.arange(0, TOTAL_RECORDS)):
     if res == "One family only: Lone parent: All children non-dependent":
         adults_total = 2
         adults_over65 = 0
-        if sex()[0] == 'Male':
+        if gender()[0] == 'Male':
             adult_m = 1
             adult_f = 0
         else:
