@@ -1,6 +1,6 @@
 database:
   # This is the name of the database where the data is stored
-  db: /home/chris/Personal_distro/myworld/myworld.sqlite
+  db: /home/chris/Personal_distro/myworld/database/myworld.sqlite
   # Should be either replace or append depending on the action needed.
   if_exists: replace
   # Database table

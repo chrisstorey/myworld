@@ -15,12 +15,11 @@ import people.gender
 import people.nationality
 from sql_helpers import create_connection
 
-with open("config.yml", "r", encoding='UTF-8') as ymlfile:
+with open("config/config.yml", "r", encoding='UTF-8') as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.SafeLoader)
 DATABASE = cfg["database"]["db"]
 GENERAL_TABLE = cfg["database"]["general_table"]
 PEOPLE_TABLE = cfg["database"]["people_table"]
-TOTAL_RECORDS = cfg["total_records"]
 
 
 def create_dataframe():

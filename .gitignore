@@ -1,2 +1,5 @@
-/myworld.sqlite
-.ipynb
+/database/myworld.sqlite
+*.ipynb
+/database/myworld.sqlite-journal
+/data/
+/database/

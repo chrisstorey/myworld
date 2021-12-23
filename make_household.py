@@ -13,7 +13,7 @@ from sql_helpers import create_connection
 Faker.seed(0)
 fake = Faker(['en-GB'])
 
-with open("config.yml", "r") as ymlfile:
+with open("config/config.yml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.SafeLoader)
 DATABASE = cfg["database"]["db"]
 GENERAL_TABLE = cfg["database"]["general_table"]
