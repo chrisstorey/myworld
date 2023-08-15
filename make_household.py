@@ -6,6 +6,7 @@ import yaml
 from faker import Faker
 from tqdm import tqdm
 
+import household
 from sql_helpers import create_connection
 
 # Get config details
@@ -32,6 +33,9 @@ def dep_children():
     return children
 
 
+def gender():
+    gender = random.choices(["Male", "Female"], weights=[9767, 10000])
+    return gender
 # Create DB connection
 conn1 = create_connection(DATABASE)
 
@@ -86,31 +90,39 @@ def create_house():
     return res, adults_total, adults_over65, adult_m, adult_f, married, children_total, non_dep
 
 
-df_postcodelist = pd.read_csv('/home/chris/Personal_distro/myworld/appropriate_postcodes_sample.csv')
+df_postcodelist = pd.read_csv('/home/chris/projects/myworld-1/appropriate_postcodes_sample.csv')
+print("==============================")
+print("Total Records = ", len(df_postcodelist))
+print("==============================")
+
 for i in tqdm(range(0, len(df_postcodelist))):
     to_lookup = df_postcodelist.iat[i, 0].replace(' ', '')
     print(to_lookup)
-    r = requests.get('https://postcodes.io/postcodes/' + to_lookup)
-    data = r.json()
-    continue
-df._set_value(i, 'My_World_premise_UUID', fake.uuid4())
-df._set_value(i, 'postcode', data['result']['postcode'])
-df._set_value(i, 'quality', data['result']['quality'])
-df._set_value(i, 'eastings', data['result']['eastings'])
-df._set_value(i, 'northings', data['result']['northings'])
-df._set_value(i, 'country', data['result']['country'])
-df._set_value(i, 'nhs_ha', data['result']['nhs_ha'])
-df._set_value(i, 'longitude', data['result']['longitude'])
-df._set_value(i, 'latitude', data['result']['latitude'])
-df._set_value(i, 'primary_care_trust', data['result']['primary_care_trust'])
-df._set_value(i, 'region', data['result']['region'])
-df._set_value(i, 'lsoa', data['result']['lsoa'])
-df._set_value(i, 'msoa', data['result']['msoa'])
-df._set_value(i, 'incode', data['result']['incode'])
-df._set_value(i, 'outcode', data['result']['outcode'])
-df._set_value(i, 'parliamentary_constituency', data['result']['parliamentary_constituency'])
-df._set_value(i, 'admin_district', data['result']['admin_district'])
-df._set_value(i, 'parish', data['result']['parish'])
+    r = requests.get('http://localhost:8000/postcodes/' + to_lookup)
+    if r.status_code == 200:
+        data = r.json()
+    else:
+        print(r.status_code)
+        continue
+
+    df._set_value(i, 'My_World_premise_UUID', fake.uuid4())
+    df._set_value(i, 'postcode', data['result']['postcode'])
+    df._set_value(i, 'quality', data['result']['quality'])
+    df._set_value(i, 'eastings', data['result']['eastings'])
+    df._set_value(i, 'northings', data['result']['northings'])
+    df._set_value(i, 'country', data['result']['country'])
+    df._set_value(i, 'nhs_ha', data['result']['nhs_ha'])
+    df._set_value(i, 'longitude', data['result']['longitude'])
+    df._set_value(i, 'latitude', data['result']['latitude'])
+    df._set_value(i, 'primary_care_trust', data['result']['primary_care_trust'])
+    df._set_value(i, 'region', data['result']['region'])
+    df._set_value(i, 'lsoa', data['result']['lsoa'])
+    df._set_value(i, 'msoa', data['result']['msoa'])
+    df._set_value(i, 'incode', data['result']['incode'])
+    df._set_value(i, 'outcode', data['result']['outcode'])
+    df._set_value(i, 'parliamentary_constituency', data['result']['parliamentary_constituency'])
+    df._set_value(i, 'admin_district', data['result']['admin_district'])
+    df._set_value(i, 'parish', data['result']['parish'])
     df._set_value(i, 'admin_county', data['result']['admin_county'])
     df._set_value(i, 'admin_ward', data['result']['admin_ward'])
     df._set_value(i, 'ced', data['result']['ced'])
@@ -134,7 +146,7 @@ df._set_value(i, 'parish', data['result']['parish'])
     if res == "One person household: Aged 65 and over":
         adults_total = 0
         adults_over65 = 1
-        if gender()[0] == 'Male':
+        if gender() == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -147,7 +159,7 @@ df._set_value(i, 'parish', data['result']['parish'])
     if res == "One person household: Other":
         adults_total = 1
         adults_over65 = 0
-        if gender()[0] == 'Male':
+        if gender == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -222,7 +234,7 @@ df._set_value(i, 'parish', data['result']['parish'])
     if res == "One family only: Same-sex civil partnership couple: One dependent child":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff = gender()
+        mm_or_ff =.gender
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -236,7 +248,7 @@ df._set_value(i, 'parish', data['result']['parish'])
     if res == "One family only: Same-sex civil partnership couple: Two or more dependent children":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff = gender()
+        mm_or_ff =.gender
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -253,7 +265,7 @@ df._set_value(i, 'parish', data['result']['parish'])
     if res == "One family only: Same-sex civil partnership couple: All children non-dependent":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff = gender()
+        mm_or_ff =.gender
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -306,7 +318,7 @@ df._set_value(i, 'parish', data['result']['parish'])
     if res == "One family only: Lone parent: One dependent child":
         adults_total = 1
         adults_over65 = 0
-        if gender()[0] == 'Male':
+        if .gender == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -317,9 +329,9 @@ df._set_value(i, 'parish', data['result']['parish'])
         non_dep = 0
 
     if res == "One family only: Lone parent: Two or more dependent children":
-        adults_total = 2
+        adults_total = 1
         adults_over65 = 0
-        if gender()[0] == 'Male':
+        if .gender == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -333,9 +345,9 @@ df._set_value(i, 'parish', data['result']['parish'])
         non_dep = 0
 
     if res == "One family only: Lone parent: All children non-dependent":
-        adults_total = 2
+        adults_total = 1
         adults_over65 = 0
-        if gender()[0] == 'Male':
+        if .gender == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -347,9 +359,11 @@ df._set_value(i, 'parish', data['result']['parish'])
 
     if res == "Other household types: With one dependent child":
         print("edge case")
+        continue
 
-    if res == "Other household types: With two or more dependent childre":
+    if res == "Other household types: With two or more dependent children":
         print("edge case")
+        continue
 
     if res == "Other household types: All full-time students":
         adults_total = 4
@@ -373,6 +387,7 @@ df._set_value(i, 'parish', data['result']['parish'])
 
     if res == "Other household types: Other":
         print("edge case")
+        continue
 
     df._set_value(i, 'household_type', res)
     df._set_value(i, 'adults_total', adults_total)
@@ -388,5 +403,3 @@ df._set_value(i, 'parish', data['result']['parish'])
 df.dropna(axis=0, how='all', inplace=True)
 
 df.to_sql(GENERAL_TABLE, conn1, if_exists=IF_EXISTS, index=False)
-
-

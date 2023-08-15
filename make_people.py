@@ -97,26 +97,26 @@ for i in tqdm(range(len(household_dataframe))):
 
     for male in range(household_dataframe.adult_m[i]):
         create_person(my_world_premise_id[i], "Adult", "Male")
-        people_dataframe.append()
-        'My_World_person_UUID',
-        "first_name",
-        "last_name",
-        "gender",
-        "adult",
-        "date_of_birth",
-        "age",
-        "married_to_UUID",
-        "nationality_for_name",
-        "is_claimant",
-        'My_World_premise_UUID'])
+        people_dataframe.append(
+            'My_World_person_UUID',
+            "first_name",
+            "last_name",
+            "gender",
+            "adult",
+            "date_of_birth",
+            "age",
+            "married_to_UUID",
+            "nationality_for_name",
+            "is_claimant",
+            'My_World_premise_UUID')
         for female adults
-        if married:
-            create_person(my_world_premise_id[i], "Adult", "Female", last_name)
-        elif:
-        create_person(my_world_premise_id[i], "Adult", "Female")
+            if married:
+                create_person(my_world_premise_id[i], "Adult", "Female", last_name)
+            elif:
+                create_person(my_world_premise_id[i], "Adult", "Female")
 
         for children
-        create_person(my_world_premise_id[i], "child", random.choice(["Male", "Female"]), last_name)
+            create_person(my_world_premise_id[i], "child", random.choice(["Male", "Female"]), last_name)
 
         for maleover65
         create_person(my_world_premise_id[i], "65", "Male")
