@@ -36,6 +36,8 @@ def dep_children():
 def gender():
     gender = random.choices(["Male", "Female"], weights=[9767, 10000])
     return gender
+
+
 # Create DB connection
 conn1 = create_connection(DATABASE)
 
@@ -234,7 +236,7 @@ for i in tqdm(range(0, len(df_postcodelist))):
     if res == "One family only: Same-sex civil partnership couple: One dependent child":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff =.gender
+        mm_or_ff = gender()
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -248,7 +250,7 @@ for i in tqdm(range(0, len(df_postcodelist))):
     if res == "One family only: Same-sex civil partnership couple: Two or more dependent children":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff =.gender
+        mm_or_ff = gender()
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -265,7 +267,7 @@ for i in tqdm(range(0, len(df_postcodelist))):
     if res == "One family only: Same-sex civil partnership couple: All children non-dependent":
         adults_total = 2
         adults_over65 = 0
-        mm_or_ff =.gender
+        mm_or_ff = gender()
         if mm_or_ff == 'Male':
             adult_m = 2
             adult_f = 0
@@ -318,7 +320,7 @@ for i in tqdm(range(0, len(df_postcodelist))):
     if res == "One family only: Lone parent: One dependent child":
         adults_total = 1
         adults_over65 = 0
-        if .gender == 'Male':
+        if gender() == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -331,7 +333,7 @@ for i in tqdm(range(0, len(df_postcodelist))):
     if res == "One family only: Lone parent: Two or more dependent children":
         adults_total = 1
         adults_over65 = 0
-        if .gender == 'Male':
+        if gender() == 'Male':
             adult_m = 1
             adult_f = 0
         else:
@@ -347,7 +349,7 @@ for i in tqdm(range(0, len(df_postcodelist))):
     if res == "One family only: Lone parent: All children non-dependent":
         adults_total = 1
         adults_over65 = 0
-        if .gender == 'Male':
+        if gender() == 'Male':
             adult_m = 1
             adult_f = 0
         else:
