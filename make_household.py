@@ -105,9 +105,7 @@ def create_house():
     )
 
 
-df_postcodelist = pd.read_csv(
-    "/home/chris/projects/myworld-1/appropriate_postcodes_sample.csv"
-)
+df_postcodelist = pd.read_csv("postcodes-04")
 print("==============================")
 print("Total Records = ", len(df_postcodelist))
 print("==============================")
@@ -269,8 +267,8 @@ for i in tqdm(range(0, len(df_postcodelist))):
         non_dep = 0
 
     if (
-            res
-            == "One family only: Same-sex civil partnership couple: Two or more dependent children"
+        res
+        == "One family only: Same-sex civil partnership couple: Two or more dependent children"
     ):
         adults_total = 2
         adults_over65 = 0
@@ -289,8 +287,8 @@ for i in tqdm(range(0, len(df_postcodelist))):
         non_dep = 0
 
     if (
-            res
-            == "One family only: Same-sex civil partnership couple: All children non-dependent"
+        res
+        == "One family only: Same-sex civil partnership couple: All children non-dependent"
     ):
         adults_total = 2
         adults_over65 = 0
