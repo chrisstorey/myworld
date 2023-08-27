@@ -4,12 +4,5 @@ requests~=2.31.0
 PyYAML==6.0.1
 tqdm==4.66.1
 setuptools~=68.0.0
-numpy==1.25.2
-mypy
-black
 
-pandas-stubs
-types-requests
-types-PyYAML
-types-tqdm
-types-setuptools
+pony~=0.7.16
