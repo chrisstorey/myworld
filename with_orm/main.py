@@ -19,7 +19,7 @@ db.bind(
 )
 
 
-class Person(db.Entity):
+class Person(db.Entity):  # type: ignore
     _table_ = "person"
     person_UUID = PrimaryKey(str)
     first_name = Optional(str)
@@ -32,14 +32,16 @@ class Person(db.Entity):
     nationality = Optional(str)
     is_claimant = Optional(bool)
     household_UUID = Optional(str)
-    household = Optional("Household")
+    household = Optional("Household")  # type: ignore
 
 
-class Household(db.Entity):
+class Household(db.Entity):  # type: ignore
     household_UUID = PrimaryKey(str)
     postcode = Optional(str)
     lat = Optional(float)
     long = Optional(float)
+    admin_district = Optional(str)
+    cd_lsoa = Optional(str)
     type = Optional(str)
     adults_total = Optional(int)
     adults_m = Optional(int)
@@ -48,6 +50,7 @@ class Household(db.Entity):
     married = Optional(bool)
     children_total = Optional(int)
     non_dep = Optional(int)
+
     persons = Set(Person)
 
 
@@ -79,28 +82,28 @@ def nationality_name():
 
 
 def gender():
-    gender = random.choices(["Male", "Female"], weights=[9767, 10000])
-    return gender[0]
+    _gender = random.choices(["Male", "Female"], weights=[9767, 10000])
+    return _gender[0]
 
 
 @db_session
 def add_person(
-    type_of_person: str,
-    gender: str,
-    nationality: str = "en_GB",
+    _type_of_person: str,
+    _gender: str,
+    _nationality: str = "en_GB",
     is_claimant: bool = False,
-    household_UUID: str = "",
+    household_uuid: str = "",
     married_lastname: str = "",
 ):
-    faker = Faker(nationality)
+    faker = Faker(_nationality)
 
-    if gender == "Female":
+    if _gender == "Female":
         first_name: str = faker.first_name_female()
     else:
-        first_name: str = faker.first_name_male()
+        first_name: str = faker.first_name_male()  # type: ignore
 
-    if nationality == "zh_CN":
-        first_name: str = faker.first_romanized_name()
+    if _nationality == "zh_CN":
+        first_name: str = faker.first_romanized_name()  # type: ignore
         last_name: str = faker.last_romanized_name()
     else:
         if married_lastname != "":
@@ -108,13 +111,13 @@ def add_person(
         else:
             last_name = faker.last_name()
 
-    if type_of_person == "Non-Dep":
+    if _type_of_person == "Non-Dep":
         date_of_birth, age = people.age.dob_non_dep()
         is_adult = False
-    elif type_of_person == "Under18":
+    elif _type_of_person == "Under18":
         date_of_birth, age = people.age.dob_under18()
         is_adult = False
-    elif type_of_person == "Over65":
+    elif _type_of_person == "Over65":
         date_of_birth, age = people.age.dob_over65()
         is_adult = True
     else:
@@ -125,18 +128,24 @@ def add_person(
         person_UUID=str(uuid4()),
         first_name=first_name,
         last_name=last_name,
-        gender=gender,
+        gender=_gender,
         is_adult=is_adult,
         date_of_birth=datetime.combine(date_of_birth, datetime.min.time()),
         age=age,
         is_claimant=is_claimant,
-        nationality=nationality,
-        household_UUID=household_UUID,
+        nationality=_nationality,
+        household_UUID=household_uuid,
     )
 
 
+# -----------------------------------------
+# Main loop
+# -----------------------------------------
+
 for x in range(10000):
     nationality = nationality_name()
-    type_of_person = random.choices(["Adult", "Non-Dep", "Under18", "Over65"],[50,5,15,30])
+    type_of_person = random.choices(
+        ["Adult", "Non-Dep", "Under18", "Over65"], [50, 5, 15, 30]
+    )
     print(type_of_person)
     add_person(type_of_person[0], gender(), nationality)

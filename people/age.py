@@ -1,3 +1,4 @@
+import calendar
 import random
 
 from faker import Faker
@@ -400,8 +401,11 @@ def year_of_birth(age: int) -> int:
     return year
 
 
-def fake_dob(year_of_b: int):
+def fake_dob(year_of_b: int) -> object:
+    old_leap_year = calendar.isleap(year_of_b)
     birth = fake.date_of_birth()
+    if False == old_leap_year and birth.month == 2 and birth.day == 29:
+        birth = birth.replace(day=28)
     birth = birth.replace(year=year_of_b)
     return birth
 
@@ -410,6 +414,7 @@ def dob_over65():
     age = age_over65()
     year = year_of_birth(age)
     dob = fake_dob(year)
+    print(dob, age)
     return dob, age
 
 
@@ -417,6 +422,7 @@ def dob_working_age():
     age = age_working_age()
     year = year_of_birth(age)
     dob = fake_dob(year)
+    print(dob, age)
     return dob, age
 
 
@@ -424,6 +430,7 @@ def dob_under18():
     age = age_under18()
     year = year_of_birth(age)
     dob = fake_dob(year)
+    print(dob, age)
     return dob, age
 
 
@@ -431,6 +438,7 @@ def dob_over18():
     age = age_over18()
     year = year_of_birth(age)
     dob = fake_dob(year)
+    print(dob, age)
     return dob, age
 
 
@@ -438,4 +446,5 @@ def dob_non_dep():
     age = age_non_dep()
     year = year_of_birth(age)
     dob = fake_dob(year)
+    print(dob, age)
     return dob, age
