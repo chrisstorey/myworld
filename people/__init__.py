@@ -414,7 +414,6 @@ def dob_over65():
     age = age_over65()
     year = year_of_birth(age)
     dob = fake_dob(year)
-    print(dob, age)
     return dob, age
 
 
@@ -422,7 +421,6 @@ def dob_working_age():
     age = age_working_age()
     year = year_of_birth(age)
     dob = fake_dob(year)
-    print(dob, age)
     return dob, age
 
 
@@ -430,7 +428,6 @@ def dob_under18():
     age = age_under18()
     year = year_of_birth(age)
     dob = fake_dob(year)
-    print(dob, age)
     return dob, age
 
 
@@ -438,7 +435,6 @@ def dob_over18():
     age = age_over18()
     year = year_of_birth(age)
     dob = fake_dob(year)
-    print(dob, age)
     return dob, age
 
 
@@ -446,5 +442,4 @@ def dob_non_dep():
     age = age_non_dep()
     year = year_of_birth(age)
     dob = fake_dob(year)
-    print(dob, age)
     return dob, age
