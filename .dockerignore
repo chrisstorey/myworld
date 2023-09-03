@@ -3,4 +3,7 @@
 /database/myworld.sqlite-journal
 /data/
 /database/
-/qodana.yaml
+/test_data/
+/.mypy_cache
+./.venv
+qodana.yaml

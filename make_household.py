@@ -105,7 +105,7 @@ def create_house():
     )
 
 
-df_postcodelist = pd.read_csv("postcodes-04")
+df_postcodelist = pd.read_csv("test_data/postcodes-04")
 print("==============================")
 print("Total Records = ", len(df_postcodelist))
 print("==============================")

@@ -5,7 +5,7 @@ from uuid import uuid4
 from faker import Faker
 from pony.orm import *
 
-import people.age
+import people
 
 # Setup ORM and DB classes
 
@@ -50,11 +50,10 @@ class Household(db.Entity):  # type: ignore
     married = Optional(bool)
     children_total = Optional(int)
     non_dep = Optional(int)
-
     persons = Set(Person)
 
 
-# set_sql_debug(True)
+set_sql_debug(True)
 
 db.generate_mapping(create_tables=True)
 
@@ -112,16 +111,16 @@ def add_person(
             last_name = faker.last_name()
 
     if _type_of_person == "Non-Dep":
-        date_of_birth, age = people.age.dob_non_dep()
+        date_of_birth, age = people.dob_non_dep()
         is_adult = False
     elif _type_of_person == "Under18":
-        date_of_birth, age = people.age.dob_under18()
+        date_of_birth, age = people.dob_under18()
         is_adult = False
     elif _type_of_person == "Over65":
-        date_of_birth, age = people.age.dob_over65()
+        date_of_birth, age = people.dob_over65()
         is_adult = True
     else:
-        date_of_birth, age = people.age.dob_working_age()
+        date_of_birth, age = people.dob_working_age()
         is_adult = True
 
     Person(
@@ -142,10 +141,20 @@ def add_person(
 # Main loop
 # -----------------------------------------
 
-for x in range(10000):
-    nationality = nationality_name()
-    type_of_person = random.choices(
-        ["Adult", "Non-Dep", "Under18", "Over65"], [50, 5, 15, 30]
-    )
-    print(type_of_person)
-    add_person(type_of_person[0], gender(), nationality)
+# for x in range(10000):
+#     nationality = nationality_name()
+#     type_of_person = random.choices(
+#         ["Adult", "Non-Dep", "Under18", "Over65"], [50, 5, 15, 30]
+#     )
+#     print(type_of_person)
+#     add_person(type_of_person[0], gender(), nationality)
+
+
+with db_session:
+    hlist = select(h for h in Household)[:]
+    print(hlist)
+
+    #
+    # result = select(h for h in Household if h.type == 'One person household: Other')
+    # for h in result:
+    #     print(h.household_uuid)
