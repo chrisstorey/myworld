@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    container_name: local_pgdb
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: chris
+      POSTGRES_PASSWORD: neurologywidget
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+volumes:
+  local_pgdata:
