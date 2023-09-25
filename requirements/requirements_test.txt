@@ -1,6 +1,6 @@
 
 types-pytz==2023.3.0.1
-types-PyYAML==6.0.12.11
+types-PyYAML==6.0.12.12
 types-requests==2.31.0.2
 types-setuptools==68.2.0.0
 types-tqdm==4.66.0.2
