@@ -5,7 +5,7 @@ types-requests==2.31.0.2
 types-setuptools==68.2.0.0
 types-tqdm==4.66.0.2
 types-urllib3==1.26.25.14
-typing-extensions==4.7.1
+typing-extensions==4.9.0
 pony-stubs==0.5.2
 pandas-stubs==2.0.3.230814
 black==23.9.1
