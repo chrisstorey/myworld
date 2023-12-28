@@ -1,0 +1,17 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/configuration-reference/#jobs
+
+workflows:
+  build-workflow:
+    jobs:
+      - runner
+jobs:
+  runner:
+    machine: true
+    resource_class: chrisstorey/general_pi
+    steps:
+      - run: echo "Hi I'm on Runners!"
