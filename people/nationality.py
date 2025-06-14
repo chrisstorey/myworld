@@ -18,4 +18,4 @@ country_names_weights = [840, 10, 61, 26, 24, 6, 6, 5, 4, 18]
 
 def country_name():
     name = random.choices(country_names, weights=country_names_weights)
-    return name
+    return name[0] # Return the string itself, not the list
