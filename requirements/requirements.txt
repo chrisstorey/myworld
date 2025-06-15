@@ -1,6 +1,6 @@
 certifi==2024.12.14
 chardet==5.2.0
-charset-normalizer==3.3.2
+charset-normalizer==3.4.2
 click==8.1.8
 Faker
 idna==3.10
