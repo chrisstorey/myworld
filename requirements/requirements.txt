@@ -7,7 +7,7 @@ idna==3.10
 numpy
 packaging==24.2
 pandas
-pathspec==0.11.2
+pathspec==0.12.1
 platformdirs==3.11.0
 pony
 psycopg2-binary==2.9.10
