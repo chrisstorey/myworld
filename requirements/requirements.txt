@@ -8,7 +8,7 @@ numpy
 packaging==25.0
 pandas
 pathspec==0.12.1
-platformdirs==3.11.0
+platformdirs==4.3.8
 pony
 psycopg2-binary==2.9.10
 python-dateutil==2.9.0.post0
