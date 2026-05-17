@@ -4,7 +4,7 @@ import collections # For checking list contents if needed
 
 # Functions/modules to test
 from people import age as people_age
-from household import household as household_module # household is a function and a module name
+import household as household_module # household is a function and a module name
 from people import nationality as people_nationality
 
 def calculate_age_for_test(born: date) -> int:
