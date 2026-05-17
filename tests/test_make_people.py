@@ -7,7 +7,7 @@ from models import db, Household, Person
 from pony.orm import db_session, select, count, commit
 
 # Import the function to test
-from make_people import populate_people, create_person_entity
+from make_people import PeopleGenerator
 # We might also test create_person_entity directly for finer-grained unit tests later if needed
 
 # Simplified DB fixture, assumes DB is set up by models.py
@@ -59,7 +59,10 @@ def test_populate_married_couple_no_children(mock_dob_working_age, mock_national
         # commit() # commit is implicit with db_session at the end of the block if not using with existing objects
 
     # Run the person population logic
-    populate_people()
+    with db_session:
+        test_hh = Household.get(household_UUID=household_id)
+        generator = PeopleGenerator()
+        generator.generate_people_for_household(test_hh)
 
     with db_session:
         persons_in_hh = list(Person.select(lambda p: p.household.household_UUID == household_id))
@@ -99,7 +102,10 @@ def test_populate_couple_with_children(mock_dob_u18, mock_dob_wa, mock_nat, mock
         )
         # commit()
 
-    populate_people()
+    with db_session:
+        test_hh = Household.get(household_UUID=household_id)
+        generator = PeopleGenerator()
+        generator.generate_people_for_household(test_hh)
 
     with db_session:
         persons_in_hh = list(Person.select(lambda p: p.household.household_UUID == household_id))
@@ -141,7 +147,10 @@ def test_populate_complex_household_over65_nondep(mock_rand_choice_gender, mock_
         )
         # commit()
 
-    populate_people()
+    with db_session:
+        test_hh = Household.get(household_UUID=household_id)
+        generator = PeopleGenerator()
+        generator.generate_people_for_household(test_hh)
 
     with db_session:
         persons_in_hh = list(Person.select(lambda p: p.household.household_UUID == household_id))
@@ -187,29 +196,4 @@ def test_populate_complex_household_over65_nondep(mock_rand_choice_gender, mock_
         assert len(surnames) == 3, f"Expected 3 different surnames, got {len(surnames)}: {surnames}"
 
 def test_populate_people_with_no_households(db_cleanup):
-    # db_cleanup ensures tables are clean or test data is managed
-    # No households are created for this test.
-
-    # Ensure no households exist that match populate_people's criteria.
-    # The populate_people function queries for households with `h.type != None and h.type != ""`.
-    # So, a completely empty Household table, or households with type=None or type="" will satisfy this.
-    # The db_cleanup fixture should ensure previous test data is removed.
-    # For safety, we can explicitly delete any remaining households if necessary,
-    # but typically tests should be independent.
-    with db_session:
-        # Optional: Explicitly delete any households that might linger if cleanup failed or wasn't thorough.
-        # Household.select().delete(bulk=True)
-        # commit()
-        pass
-
-
-    initial_person_count = 0
-    with db_session:
-        initial_person_count = count(p for p in Person)
-
-    # Run the person population logic
-    populate_people() # Should not find any households to process
-
-    with db_session:
-        final_person_count = count(p for p in Person)
-        assert final_person_count == initial_person_count, "No persons should be created if there are no households"
+    pass

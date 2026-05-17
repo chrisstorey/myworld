@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from pony.orm import Database, Required, Optional, Set, PrimaryKey, commit, db_session, select
 
@@ -7,10 +8,10 @@ db = Database()
 # Database binding (configure as per your project's settings)
 db.bind(
     provider="postgres",
-    user="chris",  # Replace with your actual username from main.py or config
-    password="neurologywidget",  # Replace with your actual password
-    host="localhost",
-    database="test",  # Replace with your actual database name
+    user=os.environ.get("POSTGRES_USER", "chris"),
+    password=os.environ.get("POSTGRES_PASSWORD", "neurologywidget"),
+    host=os.environ.get("POSTGRES_HOST", "localhost"),
+    database=os.environ.get("POSTGRES_DB", "test"),
 )
 
 # Entity definitions
