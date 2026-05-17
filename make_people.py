@@ -88,7 +88,7 @@ def create_person_entity(
         age=age,
         nationality=person_nationality, # Store the string used for Faker locale
         household=household_orm_obj, # Link to the Household ORM instance
-        household_UUID=household_orm_obj.household_UUID, # For potential direct FK reference
+
         is_claimant=False, # Default, can be updated later if needed
         # married_to_UUID is more complex and would require finding the spouse's ORM object or UUID
     )
