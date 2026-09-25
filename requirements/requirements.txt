@@ -3,7 +3,7 @@ chardet==5.2.0
 charset-normalizer==3.4.2
 click==8.2.1
 Faker
-idna==3.10
+idna==3.15
 numpy
 packaging==25.0
 pandas
